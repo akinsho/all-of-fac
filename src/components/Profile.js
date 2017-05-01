@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 // import Spinner from 'react-spinner';
 
-import { Image, Span /*, Loading */} from './styledComponents';
+import { Image, Span /*, Loading */ } from './styledComponents';
 import '../../node_modules/react-spinner/react-spinner.css';
 
 const Figcaption = styled.figcaption`
@@ -11,6 +11,15 @@ const Figcaption = styled.figcaption`
   text-align:center;
 `;
 
+const StyledLink = styled(Link)`
+  color: skyBlue;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  &:hover {
+  text-decoration:underline;
+  }
+`;
 const ProfileCard = styled.figure`
   width: 30%;
   height: auto;
@@ -46,8 +55,10 @@ class Profile extends Component {
     });
   }
   render() {
-        // {this.state.loading ? <Loading><Spinner /></Loading> : ''}
+    // {this.state.loading ? <Loading><Spinner /></Loading> : ''}
     const { handleClick, login, avatar_url, bio } = this.props;
+    const blurb =
+      emptyFieldText[Math.floor(Math.random() * emptyFieldText.length)];
     return (
       <ProfileCard onClick={handleClick} id={login}>
         <Image
@@ -56,14 +67,10 @@ class Profile extends Component {
           alt={`${login}'s picture`}
         />
         <Figcaption>
-          <Link to="/individual"><Span> {login} </Span></Link>
+          <StyledLink to="/individual"><Span> {login} </Span></StyledLink>
           <article>
             <Span> Bio: </Span>
-            {bio
-              ? bio
-              : emptyFieldText[
-                  Math.floor(Math.random() * emptyFieldText.length)
-                ]}
+            {bio ? bio : blurb}
           </article>
         </Figcaption>
       </ProfileCard>

@@ -31,6 +31,7 @@ export const Title = styled.header`
 export const Span = styled.span`
   font-weight: 800;
   margin-top: 0.3rem;
+  color: ${props => (props.article ? 'white' : '')};
   `;
 
 export const Article = styled.article`

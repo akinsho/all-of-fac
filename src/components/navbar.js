@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
+import { Link } from 'react-router-dom';
 
 import facLogo from '../../public/fac-logo.png';
 import { Title, Error } from './styledComponents';
@@ -9,11 +10,27 @@ const Nav = styled.header`
   width:100%;
   height:10%;
   background:whitesmoke;
-  box-shadow:0 1px 1px grey;
+  box-shadow:inset 0 -1px 1px grey;
   display:flex;
   justify-content: space-between;
   align-items:center;
   padding: 1rem;
+`;
+
+const Home = styled(Link)`
+  width: 4rem;
+  height: 4rem;
+  box-shadow: 0 1px 1px grey;
+  border-radius: 50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: skyBlue;
+  text-decoration: none;
+  color: black;
+  &:hover{
+    box-shadow: 0 2px 4px grey;
+  }
 `;
 
 const Logo = styled.img`
@@ -71,6 +88,7 @@ class Navbar extends Component {
       <Nav>
         <Logo src={facLogo} alt="fac logo" />
         <Title>All OF FAC</Title>
+        <Home to="/"> Home </Home>
         <Select
           onClick={this.onClick}
           value={this.state.value}
