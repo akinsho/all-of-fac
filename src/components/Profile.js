@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
-// import update from 'immutability-helper';
+import update from 'immutability-helper';
 
-import { Loading, Image } from './styledComponents';
+import { Loading, Image, Span } from './styledComponents';
 
 const ProfileCard = styled.figure`
-  width: 40%;
+  width: 30%;
   height: auto;
   padding: 1rem;
   display:flex;
@@ -44,17 +44,28 @@ class Profile extends Component {
     this.fetchFoundersCoders();
   }
 
+  updateState() {
+    //stuff here
+  }
+
   getData(url, compile) {
     return fetch(url).then(res => res.json()).then(parsedRes => {
       this.setState({
         fac: [...this.state.fac, ...parsedRes],
       });
       if (parsedRes.bio) {
-        this.state.fac.forEach(member => {
-          //TODO Need to change this as i'm mutating state!!!
-          if (member.login === parsedRes.login) {
-            member.bio = parsedRes.bio;
+        const newState = this.state.fac.map(member => {
+          if (member.login !== parsedRes.login) {
+            return member;
           }
+          return update(member, {
+            $merge: {
+              bio: parsedRes.bio,
+            },
+          });
+        });
+        this.setState({
+          fac: newState,
         });
       }
       if (compile) {
@@ -64,9 +75,9 @@ class Profile extends Component {
   }
 
   fetchFoundersCoders() {
-    this.getData(facUrl, true)
-      .then(urls => Promise.all(urls.map(url => this.getData(url))))
-      .then(console.log('urls processed', this.state));
+    this.getData(facUrl, true).then(urls =>
+      Promise.all(urls.map(url => this.getData(url)))
+    );
   }
 
   displayData(fac) {
@@ -75,9 +86,10 @@ class Profile extends Component {
         <ProfileCard key={uuid()}>
           <Image src={member.avatar_url} alt={`${member.login}'s picture`} />
           <Figcaption>
-            <p>Username: {member.login}</p>
+            <Span> Username: </Span>
+            {member.login}
             <article>
-              <span>Bio: </span>
+              <Span> Bio: </Span>
               {member.bio
                 ? member.bio
                 : '...A mystery wrapped in a function, hidden in an array'}

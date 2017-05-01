@@ -26,3 +26,7 @@ export const Title = styled.header`
   text-align: center;
   font-size: 2rem;
 `;
+
+export const Span = styled.span`
+  font-weight: 800;
+  `;
