@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Spinner from 'react-spinner';
+// import Spinner from 'react-spinner';
 
-import { Image, Span, Loading } from './styledComponents';
+import { Image, Span /*, Loading */} from './styledComponents';
 import '../../node_modules/react-spinner/react-spinner.css';
 
 const Figcaption = styled.figcaption`

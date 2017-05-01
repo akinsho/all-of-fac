@@ -8,17 +8,19 @@ import Individual from './components/individual';
 import { Container } from './components/styledComponents';
 
 injectGlobal`
+@import url('https://fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister');
   body,html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Helvetica', sans-serif;
+    font-family: 'Love Ya Like A Sister','Helvetica', cursive;
     width: 100%;
     height: 100%;
   }
 
   *{
     box-sizing: inherit;
+    font-family: inherit;
   }
 `;
 
