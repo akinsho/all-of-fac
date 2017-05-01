@@ -19,3 +19,10 @@ export const Loading = styled.div`
   width: 100%;
   height: 100vh;
 `;
+
+export const Title = styled.header`
+  width: 30%;
+  height: 100%;
+  text-align: center;
+  font-size: 2rem;
+`;

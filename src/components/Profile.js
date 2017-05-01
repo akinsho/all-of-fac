@@ -75,9 +75,13 @@ class Profile extends Component {
         <ProfileCard key={uuid()}>
           <Image src={member.avatar_url} alt={`${member.login}'s picture`} />
           <Figcaption>
-            {member.bio
-              ? member.bio
-              : '...A mystery wrapped in a function, hidden in an array'}
+            <p>Username: {member.login}</p>
+            <article>
+              <span>Bio: </span>
+              {member.bio
+                ? member.bio
+                : '...A mystery wrapped in a function, hidden in an array'}
+            </article>
           </Figcaption>
         </ProfileCard>
       );

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
 
-import logo from '../logo.svg';
 import facLogo from '../../public/fac-logo.png';
+import { Title } from './styledComponents';
 
 const Nav = styled.header`
   width:100%;
@@ -34,6 +34,10 @@ class Navbar extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      value: '',
+    };
+
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -41,9 +45,8 @@ class Navbar extends Component {
     const fac = event.target.value;
     const facsUrl = `https://api.github.com/orgs/${fac}/members`;
     fetch(facsUrl).then(res => res.json()).then(parsedRes => {
-      console.log('res', parsedRes);
-      console.log('props', this.props);
       this.props.showFAC(parsedRes);
+      this.setState({ value: fac });
     });
   }
 
@@ -51,8 +54,8 @@ class Navbar extends Component {
     return (
       <Nav>
         <Logo src={facLogo} alt="fac logo" />
-        <Logo src={logo} alt="React logo" />
-        <Select onChange={this.handleChange}>
+        <Title>All OF FAC</Title>
+        <Select value={this.state.value} onChange={this.handleChange}>
           {facs.map(fac => <option key={uuid()}>{fac}</option>)}
         </Select>
       </Nav>
