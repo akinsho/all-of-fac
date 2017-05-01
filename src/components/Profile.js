@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Spinner from 'react-spinner';
 
-import { Image, Span } from './styledComponents';
+import { Image, Span, Loading } from './styledComponents';
+import '../../node_modules/react-spinner/react-spinner.css';
 
 const Figcaption = styled.figcaption`
   padding:0.5rem
@@ -27,19 +29,46 @@ const emptyFieldText = [
   '...A mystery wrapped in a function, hidden in an array',
 ];
 
-const Profile = ({ handleClick, login, avatar_url, bio }) => (
-  <ProfileCard onClick={handleClick} id={login}>
-    <Image src={avatar_url} alt={`${login}'s picture`} />
-    <Figcaption>
-      <Link to="/individual"><Span> {login} </Span></Link>
-      <article>
-        <Span> Bio: </Span>
-        {bio
-          ? bio
-          : emptyFieldText[Math.floor(Math.random() * emptyFieldText.length)]}
-      </article>
-    </Figcaption>
-  </ProfileCard>
-);
+class Profile extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: true,
+    };
+
+    this.Loaded = this.Loaded.bind(this);
+  }
+
+  Loaded() {
+    this.setState({
+      loading: false,
+    });
+  }
+  render() {
+        // {this.state.loading ? <Loading><Spinner /></Loading> : ''}
+    const { handleClick, login, avatar_url, bio } = this.props;
+    return (
+      <ProfileCard onClick={handleClick} id={login}>
+        <Image
+          onLoad={this.Loaded}
+          src={avatar_url}
+          alt={`${login}'s picture`}
+        />
+        <Figcaption>
+          <Link to="/individual"><Span> {login} </Span></Link>
+          <article>
+            <Span> Bio: </Span>
+            {bio
+              ? bio
+              : emptyFieldText[
+                  Math.floor(Math.random() * emptyFieldText.length)
+                ]}
+          </article>
+        </Figcaption>
+      </ProfileCard>
+    );
+  }
+}
 
 export default Profile;

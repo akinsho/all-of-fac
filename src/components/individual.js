@@ -1,14 +1,12 @@
 import React from 'react';
 import Profile from './Profile';
-import { Span, Section, Article, Container } from './styledComponents';
-import { Redirect } from 'react-router-dom';
+import { Span, Section, Article, Error, Container } from './styledComponents';
 
 const Individual = ({ member }) => {
-  console.log('props', member);
   return (
     <Container>
       {!member
-        ? <Redirect to="/" />
+        ? <Error>...Waiting</Error>
         : <Article>
             <Profile {...member} />
             <Section>

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
-// import { Link } from 'react-router-dom';
 
 import facLogo from '../../public/fac-logo.png';
-import { Title } from './styledComponents';
+import { Title, Error } from './styledComponents';
 
 const Nav = styled.header`
   width:100%;
@@ -29,7 +28,18 @@ const Select = styled.select`
   box-shadow: 0 1px 1px grey;
 `;
 
-const facs = ['FAC10', 'FAC9', 'FAC8', 'FAC7', 'FAC6'];
+const facs = [
+  'FAC10',
+  'FAC9',
+  'FAC8',
+  'FAC7',
+  'FAC6',
+  'FAC5',
+  'FAC4',
+  'FAC3',
+  'FAC2',
+  'FAC1',
+];
 
 class Navbar extends Component {
   constructor(props) {
@@ -45,11 +55,15 @@ class Navbar extends Component {
   handleChange(event) {
     const fac = event.target.value;
     const facsUrl = `https://api.github.com/orgs/${fac}/members`;
-    fetch(facsUrl).then(res => res.json()).then(parsedRes => {
-      //TODO need to do oauth to get access to private members lists
-      this.props.showFAC(parsedRes);
-      this.setState({ value: fac });
-    });
+    fetch(facsUrl)
+      .then(res => res.json())
+      .then(parsedRes => {
+        //TODO need to do oauth to get access to private members lists
+        this.props.showFAC(parsedRes);
+        this.setState({ value: fac });
+        this.props.redirect();
+      })
+      .catch(err => (err ? <Error>Something Went Wrong...</Error> : ''));
   }
 
   render() {
@@ -57,7 +71,11 @@ class Navbar extends Component {
       <Nav>
         <Logo src={facLogo} alt="fac logo" />
         <Title>All OF FAC</Title>
-        <Select value={this.state.value} onChange={this.handleChange}>
+        <Select
+          onClick={this.onClick}
+          value={this.state.value}
+          onChange={this.handleChange}
+        >
           {facs.map(fac => <option key={uuid()}>{fac}</option>)}
         </Select>
       </Nav>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import Profiles from './components/Profiles';
 import Navbar from './components/navbar';
@@ -29,9 +29,11 @@ class App extends Component {
     this.state = {
       facProfiles: [],
       member: null,
+      redirect: false,
     };
     this.showFAC = this.showFAC.bind(this);
     this.updateMember = this.updateMember.bind(this);
+    this.redirect = this.redirect.bind(this);
   }
 
   showFAC(facProfiles) {
@@ -45,11 +47,18 @@ class App extends Component {
       member,
     });
   }
+
+  redirect() {
+    this.setState({
+      redirect: true,
+    });
+  }
   render() {
     return (
       <Router>
         <Container>
-          <Navbar showFAC={this.showFAC} />
+          <Navbar redirect={this.redirect} showFAC={this.showFAC} />
+          {this.state.redirect ? <Redirect to="/" /> : ''}
           <Route
             exact
             path="/"

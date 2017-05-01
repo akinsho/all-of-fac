@@ -5,7 +5,6 @@ import uuid from 'uuid/v4';
 import '../../node_modules/react-spinner/react-spinner.css';
 
 import Profile from './Profile';
-import { Loading } from './styledComponents';
 import Spinner from 'react-spinner';
 
 const CardContainer = styled.div`
@@ -49,32 +48,35 @@ class Profiles extends Component {
     const name = event.currentTarget.id;
     fetch('https://api.github.com/users/' + name)
       .then(res => res.json())
-      .then(res => this.props.updateMember(res));
+      .then(res => this.props.updateMember(res))
+      .catch(err => (err ? <Error>Something Went Wrong...</Error> : ''));
   }
 
   getData(url, compile) {
-    return fetch(url).then(res => res.json()).then(parsedRes => {
-      console.log('parsedRes', parsedRes);
-      this.setState({
-        fac: [...this.state.fac, ...parsedRes],
-      });
-      if (parsedRes.bio) {
-        this.updateState(parsedRes);
-      }
-      if (compile) {
-        return parsedRes.map(result => result.url);
-      }
-    });
+    return fetch(url)
+      .then(res => res.json())
+      .then(parsedRes => {
+        this.setState({
+          fac: [...this.state.fac, ...parsedRes],
+        });
+        if (parsedRes.bio) {
+          this.updateState(parsedRes);
+        }
+        if (compile) {
+          return parsedRes.map(result => result.url);
+        }
+      })
+      .catch(err => (err ? <Error>Something Went Wrong...</Error> : ''));
   }
 
   fetchFoundersCoders() {
-    console.log('this.state.page', this.state.page);
     this.setState({
       page: this.state.page <= 3 ? this.state.page++ : 1,
     });
     const facUrl = `https://api.github.com/orgs/foundersandcoders/members?page=${this.state.page}&per_page=30`;
     this.getData(facUrl, true).then(urls =>
       Promise.all(urls.map(url => this.getData(url)))
+     // .catch(err => (err ? <Error>Something Went Wrong...</Error> : ''));
     );
   }
 
@@ -91,7 +93,7 @@ class Profiles extends Component {
     if (fac.length < 1) {
       return (
         <CardContainer fullscreen>
-          <div><Spinner style={{ width:'100px' }} /></div>
+          <div><Spinner style={{ width: '100px' }} /></div>
         </CardContainer>
       );
     }

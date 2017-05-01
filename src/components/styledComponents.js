@@ -17,7 +17,8 @@ export const Container = styled.div`
 
 export const Loading = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 8rem;
+  background: black;
 `;
 
 export const Title = styled.header`
@@ -34,7 +35,7 @@ export const Span = styled.span`
 
 export const Article = styled.article`
   width: 100%;
-  height: 100vh;
+  height: 90vh;
   padding: 0;
   display:flex;
   align-items:center;
