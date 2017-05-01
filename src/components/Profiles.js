@@ -102,7 +102,7 @@ class Profiles extends Component {
         {!this.props.profiles
           ? this.displayData(fac)
           : this.displayData(this.props.profiles)}
-        <button onClick={this.fetchFoundersCoders}>Next</button>
+          {/*<button onClick={this.fetchFoundersCoders}>Next</button>*/}
       </CardContainer>
     );
   }
