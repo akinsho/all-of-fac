@@ -18,6 +18,7 @@ const ProfileCard = styled.figure`
   flex-wrap:wrap;
   box-shadow: 0px 2px 1px grey;
   background: white;
+  justify-content: center;
 `;
 
 const emptyFieldText = [
@@ -30,8 +31,7 @@ const Profile = ({ handleClick, login, avatar_url, bio }) => (
   <ProfileCard onClick={handleClick} id={login}>
     <Image src={avatar_url} alt={`${login}'s picture`} />
     <Figcaption>
-      <Link to="/individual"><Span> Username: </Span></Link>
-      {login}
+      <Link to="/individual"><Span> {login} </Span></Link>
       <article>
         <Span> Bio: </Span>
         {bio

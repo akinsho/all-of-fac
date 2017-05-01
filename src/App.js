@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled, { injectGlobal } from 'styled-components';
+import { injectGlobal } from 'styled-components';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Profiles from './components/Profiles';
