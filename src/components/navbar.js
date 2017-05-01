@@ -45,6 +45,7 @@ class Navbar extends Component {
     const fac = event.target.value;
     const facsUrl = `https://api.github.com/orgs/${fac}/members`;
     fetch(facsUrl).then(res => res.json()).then(parsedRes => {
+      //TODO need to do oauth to get access to private members lists
       this.props.showFAC(parsedRes);
       this.setState({ value: fac });
     });

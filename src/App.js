@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import styled, { injectGlobal } from 'styled-components';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Profile from './components/Profile';
+import Profiles from './components/Profiles';
 import Navbar from './components/navbar';
+import Individual from './components/individual';
 import { Container } from './components/styledComponents';
 
 injectGlobal`
@@ -20,15 +22,16 @@ injectGlobal`
   }
 `;
 
-
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       facProfiles: [],
+      member: null,
     };
     this.showFAC = this.showFAC.bind(this);
+    this.updateMember = this.updateMember.bind(this);
   }
 
   showFAC(facProfiles) {
@@ -36,14 +39,35 @@ class App extends Component {
       facProfiles,
     });
   }
+
+  updateMember(member) {
+    this.setState({
+      member,
+    });
+  }
   render() {
     return (
-      <Container>
-        <Navbar showFAC={this.showFAC} />
-        {this.state.facProfiles.length > 0
-          ? <Profile profiles={this.state.facProfiles} />
-          : <Profile />}
-      </Container>
+      <Router>
+        <Container>
+          <Navbar showFAC={this.showFAC} />
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return this.state.facProfiles.length > 0
+                ? <Profiles
+                    updateMember={this.updateMember}
+                    profiles={this.state.facProfiles}
+                  />
+                : <Profiles updateMember={this.updateMember} />;
+            }}
+          />
+          <Route
+            path="/individual"
+            render={() => <Individual member={this.state.member} />}
+          />
+        </Container>
+      </Router>
     );
   }
 }

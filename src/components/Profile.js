@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import uuid from 'uuid/v4';
-import update from 'immutability-helper';
+import { Link } from 'react-router-dom';
 
-import { Loading, Image, Span } from './styledComponents';
+import { Image, Span } from './styledComponents';
+
+const Figcaption = styled.figcaption`
+  padding:0.5rem
+  text-align:center;
+`;
 
 const ProfileCard = styled.figure`
   width: 30%;
@@ -16,98 +20,26 @@ const ProfileCard = styled.figure`
   background: white;
 `;
 
-const CardContainer = styled.div`
-  width: 100%;
-  height: 100%
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-`;
+const emptyFieldText = [
+  'Who did they kill, where did they hide the bodies??',
+  `They need arrays`,
+  '...A mystery wrapped in a function, hidden in an array',
+];
 
-const Figcaption = styled.figcaption`
-  padding:0.5rem
-  text-align:center;
-`;
-
-const facUrl = 'https://api.github.com/orgs/foundersandcoders/members';
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      fac: [],
-    };
-  }
-
-  componentDidMount() {
-    this.fetchFoundersCoders();
-  }
-
-  updateState(parsedRes) {
-    const newState = this.state.fac.map(member => {
-      return member.login !== parsedRes.login
-        ? member
-        : update(member, { $merge: { bio: parsedRes.bio } });
-    });
-    this.setState({
-      fac: newState,
-    });
-  }
-
-  getData(url, compile) {
-    return fetch(url).then(res => res.json()).then(parsedRes => {
-      this.setState({
-        fac: [...this.state.fac, ...parsedRes],
-      });
-      if (parsedRes.bio) {
-        this.updateState(parsedRes);
-      }
-      if (compile) {
-        return parsedRes.map(result => result.url);
-      }
-    });
-  }
-
-  fetchFoundersCoders() {
-    this.getData(facUrl, true).then(urls =>
-      Promise.all(urls.map(url => this.getData(url)))
-    );
-  }
-
-  displayData(fac) {
-    return fac.map(member => {
-      return (
-        <ProfileCard key={uuid()}>
-          <Image src={member.avatar_url} alt={`${member.login}'s picture`} />
-          <Figcaption>
-            <Span> Username: </Span>
-            {member.login}
-            <article>
-              <Span> Bio: </Span>
-              {member.bio
-                ? member.bio
-                : '...A mystery wrapped in a function, hidden in an array'}
-            </article>
-          </Figcaption>
-        </ProfileCard>
-      );
-    });
-  }
-
-  render() {
-    const { fac } = this.state;
-    if (fac.length < 1) {
-      return <Loading> Loading... </Loading>;
-    }
-    return (
-      <CardContainer>
-        {!this.props.profiles
-          ? this.displayData(fac)
-          : this.displayData(this.props.profiles)}
-      </CardContainer>
-    );
-  }
-}
+const Profile = ({ handleClick, login, avatar_url, bio }) => (
+  <ProfileCard onClick={handleClick} id={login}>
+    <Image src={avatar_url} alt={`${login}'s picture`} />
+    <Figcaption>
+      <Link to="/individual"><Span> Username: </Span></Link>
+      {login}
+      <article>
+        <Span> Bio: </Span>
+        {bio
+          ? bio
+          : emptyFieldText[Math.floor(Math.random() * emptyFieldText.length)]}
+      </article>
+    </Figcaption>
+  </ProfileCard>
+);
 
 export default Profile;
