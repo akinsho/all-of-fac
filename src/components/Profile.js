@@ -44,8 +44,15 @@ class Profile extends Component {
     this.fetchFoundersCoders();
   }
 
-  updateState() {
-    //stuff here
+  updateState(parsedRes) {
+    const newState = this.state.fac.map(member => {
+      return member.login !== parsedRes.login
+        ? member
+        : update(member, { $merge: { bio: parsedRes.bio } });
+    });
+    this.setState({
+      fac: newState,
+    });
   }
 
   getData(url, compile) {
@@ -54,19 +61,7 @@ class Profile extends Component {
         fac: [...this.state.fac, ...parsedRes],
       });
       if (parsedRes.bio) {
-        const newState = this.state.fac.map(member => {
-          if (member.login !== parsedRes.login) {
-            return member;
-          }
-          return update(member, {
-            $merge: {
-              bio: parsedRes.bio,
-            },
-          });
-        });
-        this.setState({
-          fac: newState,
-        });
+        this.updateState(parsedRes);
       }
       if (compile) {
         return parsedRes.map(result => result.url);
