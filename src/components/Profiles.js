@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import update from 'immutability-helper';
 import uuid from 'uuid/v4';
+import '../../node_modules/react-spinner/react-spinner.css';
 
 import Profile from './Profile';
 import { Loading } from './styledComponents';
+import Spinner from 'react-spinner';
 
 const CardContainer = styled.div`
   width: 100%;
-  height: 100%
+  height: ${props => (props.fullscreen ? '100vh' : '100%')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,7 +89,11 @@ class Profiles extends Component {
   render() {
     const { fac } = this.state;
     if (fac.length < 1) {
-      return <Loading> Loading... </Loading>;
+      return (
+        <CardContainer fullscreen>
+          <div><Spinner style={{ width:'100px' }} /></div>
+        </CardContainer>
+      );
     }
     return (
       <CardContainer>
