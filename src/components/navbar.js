@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import uuid from 'uuid/v4';
-import { Link } from 'react-router-dom';
 
 import facLogo from '../../public/fac-logo.png';
-import { Title, Error } from './styledComponents';
+import { Title, Home, Error, Media } from './styledComponents';
 
 const Nav = styled.header`
   width:100%;
-  height:10%;
   background:whitesmoke;
   box-shadow:inset 0 -1px 1px grey;
   display:flex;
@@ -17,35 +15,26 @@ const Nav = styled.header`
   padding: 1rem;
 `;
 
-const Home = styled(Link)`
-  width: 4rem;
-  height: 4rem;
-  box-shadow: 0 1px 1px grey;
-  border-radius: 50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: skyBlue;
-  text-decoration: none;
-  color: black;
-  &:hover{
-    box-shadow: 0 2px 4px grey;
-  }
-`;
-
 const Logo = styled.img`
   width:4rem;
   height:5rem;
 `;
 
+// ${Media.handheld`
+//   flex-basis:100%;
+// `}
 const Select = styled.select`
-  width: 20%;
-  height: 100%;
+  width: 25%;
+  height: 3rem;
   border: none;
   box-shadow: 0 1px 1px grey;
+  ${Media.handheld`
+    display:none;
+`}
 `;
 
 const facs = [
+  'Please Select a cohort',
   'FAC10',
   'FAC9',
   'FAC8',
@@ -77,8 +66,10 @@ class Navbar extends Component {
       .then(parsedRes => {
         //TODO need to do oauth to get access to private members lists
         this.props.showFAC(parsedRes);
-        this.setState({ value: fac });
-        this.props.redirect();
+        if (Array.isArray(parsedRes)) {
+          this.setState({ value: fac });
+          this.props.redirect();
+        }
       })
       .catch(err => (err ? <Error>Something Went Wrong...</Error> : ''));
   }
@@ -89,11 +80,7 @@ class Navbar extends Component {
         <Logo src={facLogo} alt="fac logo" />
         <Title>All OF FAC</Title>
         <Home to="/"> Home </Home>
-        <Select
-          onClick={this.onClick}
-          value={this.state.value}
-          onChange={this.handleChange}
-        >
+        <Select value={this.state.value} onChange={this.handleChange}>
           {facs.map(fac => <option key={uuid()}>{fac}</option>)}
         </Select>
       </Nav>

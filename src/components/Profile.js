@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 // import Spinner from 'react-spinner';
 
-import { Image, Span /*, Loading */ } from './styledComponents';
+import {
+  Media,
+  StyledLink,
+  Image,
+  Span /*, Loading */,
+} from './styledComponents';
 import '../../node_modules/react-spinner/react-spinner.css';
 
 const Figcaption = styled.figcaption`
@@ -11,17 +15,11 @@ const Figcaption = styled.figcaption`
   text-align:center;
 `;
 
-const StyledLink = styled(Link)`
-  color: skyBlue;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  text-decoration: none;
-  &:hover {
-  text-decoration:underline;
-  }
-`;
 const ProfileCard = styled.figure`
   width: 30%;
+  ${Media.handheld`
+      width: 80%;
+`}
   height: auto;
   padding: 1rem;
   display:flex;
@@ -37,6 +35,7 @@ const emptyFieldText = [
   `They need arrays`,
   '...A mystery wrapped in a function, hidden in an array',
 ];
+const blurb = emptyFieldText[Math.floor(Math.random() * emptyFieldText.length)];
 
 class Profile extends Component {
   constructor(props) {
@@ -57,8 +56,6 @@ class Profile extends Component {
   render() {
     // {this.state.loading ? <Loading><Spinner /></Loading> : ''}
     const { handleClick, login, avatar_url, bio } = this.props;
-    const blurb =
-      emptyFieldText[Math.floor(Math.random() * emptyFieldText.length)];
     return (
       <ProfileCard onClick={handleClick} id={login}>
         <Image

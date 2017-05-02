@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { injectGlobal } from 'styled-components';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
+import styled from 'styled-components';
 import Profiles from './components/Profiles';
 import Navbar from './components/navbar';
 import Individual from './components/individual';
-import { Container } from './components/styledComponents';
+import { Container, Home, Error } from './components/styledComponents';
 
 injectGlobal`
 @import url('https://fonts.googleapis.com/css?family=Love+Ya+Like+A+Sister');
@@ -24,6 +25,11 @@ injectGlobal`
   }
 `;
 
+const ErrorButton = styled(Home)`
+  font-size: 0.8rem;
+  background: whitesmoke;
+`;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -32,13 +38,21 @@ class App extends Component {
       facProfiles: [],
       member: null,
       redirect: false,
+      error: '',
     };
     this.showFAC = this.showFAC.bind(this);
     this.updateMember = this.updateMember.bind(this);
     this.redirect = this.redirect.bind(this);
+    this.removeError = this.removeError.bind(this);
   }
 
   showFAC(facProfiles) {
+    if (!facProfiles.length) {
+      this.setState({
+        error: facProfiles.message,
+      });
+      //TODO maybe use a set timeout maybe better
+    }
     this.setState({
       facProfiles,
     });
@@ -47,6 +61,12 @@ class App extends Component {
   updateMember(member) {
     this.setState({
       member,
+    });
+  }
+
+  removeError() {
+    this.setState({
+      error: '',
     });
   }
 
@@ -61,6 +81,14 @@ class App extends Component {
         <Container>
           <Navbar redirect={this.redirect} showFAC={this.showFAC} />
           {this.state.redirect ? <Redirect to="/" /> : ''}
+          {this.state.error
+            ? <Error>
+                {this.state.error}
+                <ErrorButton onClick={this.removeError} to="/">
+                  Go Home
+                </ErrorButton>
+              </Error>
+            : ''}
           <Route
             exact
             path="/"
